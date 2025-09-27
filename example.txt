@@ -1,0 +1,2792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoenix Flight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Phoenix Flight Main Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .logo-container {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+        .fractal-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #00ff00, #ff0000, #0000ff, #ffff00, #ff00ff, #00ffff, #00ff00);
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: black;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 2;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .nav-btn.active {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+        
+        .main-content {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 40px;
+            position: relative;
+        }
+        .title-container {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+        .flame-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(ellipse at center, 
+                rgba(0, 255, 0, 0.8) 0%,
+                rgba(255, 255, 0, 0.6) 20%,
+                rgba(255, 0, 255, 0.4) 40%,
+                rgba(0, 255, 255, 0.3) 60%,
+                rgba(255, 100, 0, 0.2) 80%,
+                transparent 100%);
+            filter: blur(40px);
+            animation: flameFlicker 4s ease-in-out infinite alternate;
+        }
+        @keyframes flameFlicker {
+            0% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+        .title {
+            font-size: clamp(6rem, 15vw, 12rem);
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(45deg, 
+                #00ff00 0%,
+                #ffff00 25%,
+                #ff00ff 50%,
+                #00ffff 75%,
+                #00ff00 100%);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowShift 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.5));
+        }
+        @keyframes rainbowShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            margin-bottom: 3rem;
+            max-width: 800px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, 
+                #ffffff 0%,
+                #00ff00 25%,
+                #ffffff 50%,
+                #00ffff 75%,
+                #ffffff 100%);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: subtitleGlow 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+        @keyframes subtitleGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .btn-primary {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: rgba(0, 255, 0, 0.5);
+            color: #00ff00;
+        }
+        .btn-primary:hover {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 35px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            padding-top: 8px;
+        }
+        .scroll-indicator::before {
+            content: '';
+            width: 3px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 2px;
+            animation: scrollDot 2s infinite;
+        }
+        @keyframes scrollDot {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(15px); opacity: 0; }
+        }
+
+        /* Page Styles */
+        .page {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+            background: #000000;
+            padding: 20px;
+        }
+        .page.active {
+            display: block;
+        }
+        
+        .page-title {
+            position: absolute;
+            top: 3%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, 
+                #00ff00 0%,
+                #ffff00 25%,
+                #ff00ff 50%,
+                #00ffff 75%,
+                #00ff00 100%);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowShift 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 0, 0.5));
+            text-align: center;
+            white-space: nowrap;
+            z-index: 1;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .back-button-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: conic-gradient(from 0deg, 
+                #ff0000 0deg, 
+                #ff8000 45deg, 
+                #ffff00 90deg, 
+                #80ff00 135deg, 
+                #00ff00 180deg, 
+                #00ff80 225deg, 
+                #00ffff 270deg, 
+                #8000ff 315deg, 
+                #ff0000 360deg);
+            animation: fractalSpin 3s linear infinite;
+            border-radius: 12px;
+        }
+        @keyframes fractalSpin {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+        .back-button span {
+            position: relative;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        .back-button:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        /* ENHANCED CHATBOT STYLES - Dark Ocean Theme - FIXED SIZE */
+        .chatbot-container {
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            max-width: 900px;
+            height: 80vh;
+            max-height: 600px;
+            min-height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 100, 200, 0.4);
+            border: 2px solid rgba(0, 150, 255, 0.6);
+            background: linear-gradient(135deg, 
+                rgba(10, 25, 47, 0.98) 0%,
+                rgba(20, 40, 70, 0.95) 50%,
+                rgba(5, 15, 35, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            z-index: 5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Dark Ocean Header */
+        .chatbot-header {
+            background: linear-gradient(135deg, 
+                #0a1929 0%, 
+                #1a2332 25%, 
+                #0d47a1 50%, 
+                #1565c0 75%, 
+                #0a1929 100%);
+            color: #e3f2fd;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 100, 200, 0.3);
+        }
+        .chatbot-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+        }
+        .chatbot-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .control-btn {
+            background: linear-gradient(135deg, rgba(13, 71, 161, 0.8), rgba(21, 101, 192, 0.6));
+            border: 1px solid rgba(0, 150, 255, 0.4);
+            color: #e3f2fd;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .control-btn:hover {
+            background: linear-gradient(135deg, rgba(21, 101, 192, 0.9), rgba(30, 136, 229, 0.7));
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+        }
+
+        .chatbot-main {
+            display: flex;
+            height: calc(100% - 60px);
+        }
+
+        /* Dark Ocean Sidebar */
+        .chat-sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, rgba(10, 25, 47, 0.9) 0%, rgba(15, 30, 55, 0.8) 100%);
+            border-right: 2px solid rgba(0, 150, 255, 0.3);
+            padding: 12px;
+            overflow-y: auto;
+        }
+        .conversation-item {
+            padding: 8px;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.6), rgba(10, 25, 47, 0.4));
+            border: 1px solid rgba(0, 150, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            color: #b3d9ff;
+        }
+        .conversation-item:hover {
+            background: linear-gradient(135deg, rgba(30, 60, 100, 0.8), rgba(20, 40, 70, 0.6));
+            border-color: rgba(0, 200, 255, 0.4);
+            box-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
+        }
+        .conversation-item.active {
+            background: linear-gradient(135deg, rgba(13, 71, 161, 0.8), rgba(21, 101, 192, 0.6));
+            border-color: rgba(0, 200, 255, 0.6);
+            color: #e3f2fd;
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Dark Ocean Messages Area */
+        .messages-container {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: linear-gradient(180deg, 
+                rgba(5, 15, 35, 0.7) 0%, 
+                rgba(10, 25, 47, 0.5) 50%, 
+                rgba(5, 15, 35, 0.7) 100%);
+        }
+        .message {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        .message-content {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .message.user .message-content {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: #e3f2fd;
+            border: 1px solid rgba(0, 150, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+        }
+        .message.assistant .message-content {
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.9), rgba(30, 60, 100, 0.7));
+            color: #e3f2fd;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 100, 200, 0.2);
+        }
+        .message-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            border: 2px solid rgba(0, 150, 255, 0.4);
+        }
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: #e3f2fd;
+        }
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, rgba(0, 150, 255, 0.8), rgba(0, 200, 255, 0.6));
+            color: #000;
+        }
+
+        /* Dark Ocean Input Area */
+        .input-area {
+            padding: 15px;
+            border-top: 2px solid rgba(0, 150, 255, 0.3);
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.9), rgba(20, 40, 70, 0.7));
+        }
+        .input-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .provider-select, .model-select, .voice-select {
+            padding: 4px 8px;
+            border: 1px solid rgba(0, 150, 255, 0.4);
+            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.8), rgba(10, 25, 47, 0.6));
+            color: #b3d9ff;
+            font-size: 11px;
+        }
+        .provider-select:focus, .model-select:focus, .voice-select:focus {
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 8px rgba(0, 150, 255, 0.3);
+            outline: none;
+        }
+        
+        /* New Model Input */
+        .new-model-input {
+            padding: 4px 8px;
+            border: 1px solid rgba(0, 150, 255, 0.4);
+            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.8), rgba(10, 25, 47, 0.6));
+            color: #b3d9ff;
+            font-size: 11px;
+            max-width: 120px;
+        }
+        .new-model-input:focus {
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 8px rgba(0, 150, 255, 0.3);
+            outline: none;
+        }
+        .new-model-input::placeholder {
+            color: rgba(179, 217, 255, 0.6);
+        }
+
+        /* System Prompt Button */
+        .system-prompt-btn {
+            background: linear-gradient(135deg, rgba(0, 150, 255, 0.8), rgba(0, 200, 255, 0.6));
+            border: 1px solid rgba(0, 150, 255, 0.4);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+        }
+        .system-prompt-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 200, 255, 0.9), rgba(0, 250, 255, 0.7));
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .message-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid rgba(0, 150, 255, 0.4);
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.8), rgba(10, 25, 47, 0.6));
+            color: #e3f2fd;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .message-input:focus {
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 12px rgba(0, 150, 255, 0.4);
+        }
+        .message-input::placeholder {
+            color: rgba(179, 217, 255, 0.6);
+        }
+
+        .voice-btn, .send-btn {
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(0, 150, 255, 0.4);
+        }
+        .voice-btn {
+            background: linear-gradient(135deg, rgba(0, 150, 255, 0.8), rgba(0, 200, 255, 0.6));
+            color: #000;
+        }
+        .voice-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 200, 255, 0.9), rgba(0, 250, 255, 0.7));
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.5);
+        }
+        .voice-btn.recording {
+            background: linear-gradient(135deg, #d32f2f, #f44336);
+            color: white;
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 15px rgba(244, 67, 54, 0.6);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .send-btn {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: #e3f2fd;
+        }
+        .send-btn:hover {
+            background: linear-gradient(135deg, #1565c0, #1976d2);
+            box-shadow: 0 0 15px rgba(13, 71, 161, 0.5);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.9), rgba(30, 60, 100, 0.7));
+            border-radius: 16px;
+            max-width: 80px;
+            color: #b3d9ff;
+            font-size: 12px;
+        }
+        .typing-dots {
+            display: flex;
+            gap: 2px;
+        }
+        .typing-dot {
+            width: 5px;
+            height: 5px;
+            background: rgba(0, 150, 255, 0.8);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        /* Dark Ocean Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal.hidden {
+            display: none;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, 
+                rgba(10, 25, 47, 0.98) 0%,
+                rgba(20, 40, 70, 0.95) 50%,
+                rgba(5, 15, 35, 0.98) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 100, 200, 0.4);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 150, 255, 0.4);
+        }
+        .modal-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px;
+        }
+        .modal-close-btn {
+            background: none; 
+            border: none; 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: #90caf9; 
+            padding: 0; 
+            width: 30px; 
+            height: 30px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .modal-close-btn:hover {
+            background: rgba(144, 202, 249, 0.2);
+        }
+        .auth-header h2 {
+            color: #e3f2fd;
+            margin-bottom: 10px;
+            font-size: 22px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+        }
+        .auth-header p {
+            color: #b3d9ff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid rgba(0, 150, 255, 0.4);
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.6), rgba(10, 25, 47, 0.4));
+            color: #b3d9ff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        .auth-tab.active {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: #e3f2fd;
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid rgba(0, 150, 255, 0.4);
+            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.8), rgba(10, 25, 47, 0.6));
+            color: #e3f2fd;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .form-group textarea {
+            min-height: 100px;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 12px rgba(0, 150, 255, 0.4);
+        }
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: rgba(179, 217, 255, 0.6);
+        }
+        .form-group label {
+            display: block;
+            color: #b3d9ff;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .btn--primary {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: #e3f2fd;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+        }
+        .btn--primary:hover {
+            background: linear-gradient(135deg, #1565c0, #1976d2);
+            box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
+        }
+        .btn--full-width {
+            width: 100%;
+        }
+        .demo-hint {
+            text-align: center;
+            margin-top: 12px;
+            color: #90caf9;
+            font-size: 11px;
+        }
+
+        /* Admin Panel Dark Ocean Styles */
+        .admin-tab-btn {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid rgba(0, 150, 255, 0.4);
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.6), rgba(10, 25, 47, 0.4));
+            color: #b3d9ff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+        .admin-tab-btn.active {
+            background: linear-gradient(135deg, #0d47a1, #1565c0);
+            color: #e3f2fd;
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+        }
+        .admin-tab-btn:hover {
+            background: linear-gradient(135deg, rgba(30, 60, 100, 0.8), rgba(20, 40, 70, 0.6));
+            border-color: rgba(0, 200, 255, 0.4);
+        }
+        .api-key-section {
+            margin-bottom: 15px;
+        }
+        .api-key-section label {
+            display: block;
+            color: #b3d9ff;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        .api-key-section input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid rgba(0, 150, 255, 0.4);
+            border-radius: 4px;
+            background: linear-gradient(135deg, rgba(20, 40, 70, 0.8), rgba(10, 25, 47, 0.6));
+            color: #e3f2fd;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .api-key-section input:focus {
+            border-color: rgba(0, 200, 255, 0.6);
+            box-shadow: 0 0 8px rgba(0, 150, 255, 0.3);
+            outline: none;
+        }
+        .api-key-section small {
+            color: #90caf9;
+            font-size: 10px;
+        }
+
+        /* GAME PAGE STYLES */
+        .game-container {
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1020px;
+            background: linear-gradient(135deg, 
+                rgba(10, 25, 47, 0.98) 0%,
+                rgba(20, 40, 70, 0.95) 50%,
+                rgba(5, 15, 35, 0.98) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 100, 200, 0.4);
+            border: 2px solid rgba(0, 150, 255, 0.6);
+            backdrop-filter: blur(20px);
+            z-index: 5;
+            padding: 20px;
+        }
+
+        /* Game Canvas Styles */
+        .game-canvas-container {
+            width: 100%;
+            background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 100%);
+            border-radius: 15px;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-canvas {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 10px;
+            background: #87ceeb;
+            display: block;
+            cursor: crosshair;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            color: #e3f2fd;
+        }
+
+        .game-info {
+            text-align: center;
+            color: #b3d9ff;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .health-bar {
+            width: 200px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 0 auto 15px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000 0%, #ffff00 50%, #00ff00 100%);
+            width: 100%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .main-content {
+                padding: 0 20px;
+            }
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .page-title {
+                white-space: normal;
+                line-height: 0.9;
+                font-size: clamp(1.2rem, 3vw, 2rem);
+            }
+            .chatbot-container {
+                width: 95%;
+                height: 85vh;
+                min-height: 400px;
+            }
+            .back-button {
+                top: 15px;
+                right: 15px;
+                width: 100px;
+                height: 35px;
+                font-size: 12px;
+            }
+            .chat-sidebar {
+                width: 150px;
+            }
+            .chatbot-main {
+                flex-direction: column;
+            }
+            .chat-sidebar {
+                width: 100%;
+                height: 80px;
+                border-right: none;
+                border-bottom: 2px solid rgba(0, 150, 255, 0.3);
+            }
+            .input-controls {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .input-controls > * {
+                width: 100%;
+                max-width: none;
+            }
+            .nav-menu {
+                gap: 10px;
+            }
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .game-container {
+                width: 95%;
+                padding: 15px;
+            }
+            .game-canvas {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>Phoenix Flight AI Chat</h2>
+                    <p>Enter the dimensional gateway</p>
+                </div>
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="signup">Sign Up</button>
+                </div>
+                <form id="authForm">
+                    <div class="form-group">
+                        <input type="email" id="authEmail" placeholder="Email address" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="authPassword" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn--primary btn--full-width">
+                        <span id="authSubmitText">Enter Portal</span>
+                    </button>
+                </form>
+                <div class="demo-hint">
+                    <small>Try: demo@phoenix.com / password: phoenix</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Prompt Modal -->
+    <div id="systemPromptModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: #e3f2fd; margin: 0; text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);">System Prompt Manager</h3>
+                <button class="modal-close-btn" onclick="closeSystemPromptModal()">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="promptName">Prompt Name:</label>
+                <input type="text" id="promptName" placeholder="Enter prompt name">
+            </div>
+            
+            <div class="form-group">
+                <label for="promptContent">System Prompt:</label>
+                <textarea id="promptContent" placeholder="Enter your system prompt here..." rows="8"></textarea>
+            </div>
+            
+            <button onclick="saveSystemPrompt()" class="btn--primary btn--full-width">
+                Save System Prompt
+            </button>
+            
+            <div style="margin-top: 20px;">
+                <h4 style="color: #b3d9ff; margin-bottom: 10px; font-size: 14px;">Saved Prompts:</h4>
+                <select id="savedPrompts" style="width: 100%; padding: 8px; margin-bottom: 10px; border: 2px solid rgba(0, 150, 255, 0.4); border-radius: 6px; background: linear-gradient(135deg, rgba(20, 40, 70, 0.8), rgba(10, 25, 47, 0.6)); color: #e3f2fd;">
+                    <option value="">Select a prompt...</option>
+                </select>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="loadSystemPrompt()" class="btn--primary" style="flex: 1;">Load</button>
+                    <button onclick="deleteSystemPrompt()" class="btn--primary" style="flex: 1; background: linear-gradient(135deg, #d32f2f, #f44336);">Delete</button>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px; padding: 12px; background: rgba(0, 150, 255, 0.1); border-radius: 6px; border: 1px solid rgba(0, 150, 255, 0.3);">
+                <h5 style="color: #b3d9ff; margin-bottom: 8px; font-size: 12px;">Active System Prompt:</h5>
+                <div id="currentPromptDisplay" style="color: #90caf9; font-size: 11px; line-height: 1.4;">
+                    <div>No system prompt active</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Phoenix Flight Page -->
+    <header class="header">
+        <div class="logo-container">
+            <div class="fractal-bg"></div>
+            <div class="logo">PF</div>
+        </div>
+        <div class="nav-menu">
+            <button class="nav-btn active" id="homeBtn">Home</button>
+            <button class="nav-btn" id="chatNavBtn">Chat</button>
+            <button class="nav-btn" id="gameNavBtn">Game</button>
+        </div>
+    </header>
+    
+    <main class="main-content" id="homePage">
+        <div class="title-container">
+            <div class="flame-bg"></div>
+            <h1 class="title">Phoenix</h1>
+        </div>
+        
+        <p class="subtitle">
+            We are thrilled to unveil Phoenix Flight, a new chat bot that transports you to other worlds and dimensions. Plus an epic stickman adventure game!
+        </p>
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="showChatPage()">CHAT WITH AI ASSISTANT</button>
+            <button class="btn btn-primary" onclick="showGamePage()">PLAY STICKMAN GAME</button>
+        </div>
+        <div class="scroll-indicator"></div>
+    </main>
+
+    <!-- Chat Page -->
+    <div class="page" id="chatPage">
+        <div class="back-button" onclick="showHomePage()">
+            <div class="back-button-bg"></div>
+            <span>← BACK TO MAIN</span>
+        </div>
+        
+        <div class="chatbot-container" id="chatbotContainer">
+            <!-- Chatbot Header -->
+            <div class="chatbot-header">
+                <h3 class="chatbot-title">Phoenix Flight AI Chat</h3>
+                <div class="chatbot-controls">
+                    <button class="control-btn" onclick="showAuth()">
+                        <i class="fas fa-user"></i> Login
+                    </button>
+                    <button class="control-btn" onclick="showAdminPanel()">
+                        <i class="fas fa-cog"></i> Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Chatbot Interface -->
+            <div class="chatbot-main">
+                <!-- Sidebar -->
+                <div class="chat-sidebar">
+                    <h4 style="color: #b3d9ff; margin-bottom: 10px; font-size: 12px; text-shadow: 0 0 5px rgba(0, 150, 255, 0.3);">Conversations</h4>
+                    <div id="conversationsList">
+                        <div class="conversation-item active" onclick="switchConversation('phoenix1')">
+                            Phoenix Character Chat
+                        </div>
+                        <div class="conversation-item" onclick="switchConversation('phoenix2')">
+                            Character Creation
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="chat-area">
+                    <div class="messages-container" id="messagesContainer">
+                        <!-- Messages will be added here -->
+                        <div class="message assistant">
+                            <div class="message-avatar">AI</div>
+                            <div class="message-content">
+                                Welcome to Phoenix Flight! I'm here to guide you through amazing characters and dimensions. What adventure shall we embark on today?
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="input-area">
+                        <div class="input-controls">
+                            <select class="provider-select" id="providerSelect" onchange="updateModels()">
+                                <option value="cerebras">Cerebras</option>
+                                <option value="groq">Groq</option>
+                                <option value="openrouter">OpenRouter</option>
+                                <option value="modal">Modal</option>
+                            </select>
+                            <select class="model-select" id="modelSelect">
+                                <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
+                            </select>
+                            <select class="voice-select" id="voiceSelect">
+                                <option value="female1">Phoenix Female</option>
+                                <option value="male1">Phoenix Male</option>
+                                <option value="female2">Flight Female</option>
+                                <option value="male2">Flight Male</option>
+                            </select>
+                            <input type="text" class="new-model-input" id="newModelInput" placeholder="Add model..." onkeypress="if(event.key==='Enter'){addModel()}">
+                            <button class="system-prompt-btn" onclick="showSystemPromptModal()">
+                                <i class="fas fa-brain"></i> System Prompts
+                            </button>
+                        </div>
+                        <div class="input-row">
+                            <input type="text" class="message-input" id="messageInput" placeholder="Enter your message..." onkeypress="handleEnterKey(event)">
+                            <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceRecording()">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button class="send-btn" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h1 class="page-title">AI ASSISTANT</h1>
+    </div>
+
+    <!-- Game Page -->
+    <div class="page" id="gamePage">
+        <div class="back-button" onclick="showHomePage()">
+            <div class="back-button-bg"></div>
+            <span>← BACK TO MAIN</span>
+        </div>
+        
+        <div class="game-container">
+            <div class="game-info">
+                <h3 style="color: #e3f2fd; margin-bottom: 10px;">🎮 Phoenix Flight Stickman Adventure</h3>
+                <p>Guide your stickman through an epic adventure! Touch the bonfire to ignite and explode!</p>
+            </div>
+            
+            <div class="health-bar">
+                <div class="health-fill" id="gameHealthFill"></div>
+            </div>
+            
+            <div class="game-canvas-container">
+                <canvas class="game-canvas" id="gameCanvas" width="1000" height="600"></canvas>
+            </div>
+            
+            <div class="game-controls">
+                <div>🏃 <strong>Arrow Keys:</strong> Move</div>
+                <div>⬆️ <strong>Up:</strong> Jump</div>
+                <div>🏹 <strong>Space:</strong> Shoot</div>
+                <div>🔥 <strong>Bonfire:</strong> Touch to ignite!</div>
+                <div>🐷 <strong>Piggies:</strong> Defeat them!</div>
+            </div>
+        </div>
+        
+        <h1 class="page-title">STICKMAN ADVENTURE</h1>
+    </div>
+
+    <script>
+        // Application State with PRE-FILLED API KEYS AND SYSTEM PROMPTS
+        let appState = {
+            currentUser: null,
+            currentPage: 'home',
+            conversations: {
+                'phoenix1': {
+                    id: 'phoenix1',
+                    title: 'Phoenix Character Chat',
+                    messages: [
+                        {
+                            role: 'assistant',
+                            content: 'Welcome to Phoenix Flight! I\'m here to guide you through amazing characters and dimensions. What adventure shall we embark on today?',
+                            timestamp: new Date()
+                        }
+                    ]
+                },
+                'phoenix2': {
+                    id: 'phoenix2',
+                    title: 'Character Creation',
+                    messages: [
+                        {
+                            role: 'assistant',
+                            content: 'Let\'s craft an amazing character for the Phoenix Flight universe. What type of being interests you most?',
+                            timestamp: new Date()
+                        }
+                    ]
+                }
+            },
+            activeConversationId: 'phoenix1',
+            isRecording: false,
+            selectedProvider: 'cerebras',
+            selectedModel: 'llama-3.3-70b-versatile',
+            selectedVoice: 'female1',
+            // PRE-FILLED API KEYS
+            apiKeys: {
+                cerebras: 'csk-wxytp69eenkhp6tdtnwvme8838jjt3wxv95c92ffjptvnknk',
+                groq: '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',
+                openrouter: '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',
+                fish: '',
+                segmind: '',
+                modal: ''
+            },
+            // SYSTEM PROMPTS FUNCTIONALITY
+            systemPrompts: [],
+            activeSystemPrompt: null,
+            currentSystemPromptId: null
+        };
+
+        // Game State
+        let gameState = {
+            canvas: null,
+            ctx: null,
+            player: null,
+            enemies: [],
+            platforms: [],
+            arrows: [],
+            particles: [],
+            camera: { x: 0, y: 0 },
+            keys: {},
+            gameRunning: false,
+            lastTime: 0,
+            worldOffset: 0
+        };
+
+        // API Providers with UPDATED MODEL LISTS
+        const apiProviders = {
+            cerebras: {
+                name: "Cerebras",
+                models: ["llama-3.3-70b", "llama3.1-8b", "openai/gpt-oss-120b", "openai/gpt-oss-20b"]
+            },
+            groq: {
+                name: "Groq", 
+                models: [
+                    "llama-3.3-70b-versatile",
+                    "llama-3.1-8b-instant", 
+                    "meta-llama/llama-guard-4-12b",
+                    "openai/gpt-oss-120b",
+                    "openai/gpt-oss-20b",
+                    "whisper-large-v3",
+                    "whisper-large-v3-turbo",
+                    "qwen-qwq-32b",
+                    "mistral-saba-24b",
+                    "qwen-2.5-coder-32b",
+                    "qwen-2.5-32b",
+                    "deepseek-r1-distill-qwen-32b",
+                    "deepseek-r1-distill-llama-70b",
+                    "llama-3.3-70b-specdec",
+                    "llama-3.2-1b-preview",
+                    "llama-3.2-3b-preview",
+                    "llama-3.2-11b-vision-preview",
+                    "llama-3.2-90b-vision-preview",
+                    "moonshotai/kimi-k2-instruct"
+                ]
+            },
+            openrouter: {
+                name: "OpenRouter",
+                models: ["deepseek/deepseek-chat-v3.1:free"]
+            },
+            modal: {
+                name: "Modal",
+                models: ["custom-model-1", "custom-model-2", "llama-70b-modal"]
+            }
+        };
+
+        // STICKMAN GAME IMPLEMENTATION - FULL RECREATION WITH FIXES
+        const SCREEN_WIDTH = 1000;
+        const SCREEN_HEIGHT = 600;
+        const GRAVITY = 0.8;
+        const JUMP_STRENGTH = -15;
+        const MOVE_SPEED = 5;
+        const ARROW_SPEED = 18;
+        const PIG_SPEED = 2; // Reduced from 4
+        const PIG_BOUNCE_H = 20;
+        const PIG_BOUNCE_V = 15;
+        const MAX_PIGGIES = 5; // Reduced from 9
+        const FIRE_RUN_SPEED = 12;
+
+        function randInt(a, b) { 
+            return Math.floor(Math.random() * (b - a) + a); 
+        }
+
+        class Player {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.width = 30;
+                this.height = 60;
+                this.velX = 0;
+                this.velY = 0;
+                this.onGround = false;
+                this.facingRight = true;
+                this.health = 15;
+                this.maxHealth = 15;
+                this.shootCooldown = 0;
+                this.onFire = false;
+                this.fireTimer = 0;
+                this.fireSpeed = FIRE_RUN_SPEED;
+                this.exploding = false;
+                this.explosionTimer = 0;
+                this.pieces = [];
+                this.gameOver = false;
+                this.arrows = [];
+            }
+
+            update(platforms) {
+                if (this.exploding) {
+                    this.explosionTimer++;
+                    this.pieces.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += GRAVITY * 0.15;
+                    });
+                    this.pieces = this.pieces.filter(p => 
+                        p.x > -100 && p.x < SCREEN_WIDTH + 100 && 
+                        p.y > -100 && p.y < SCREEN_HEIGHT + 100
+                    );
+                    if (this.pieces.length === 0) {
+                        this.exploding = false;
+                        this.gameOver = true;
+                    }
+                    return;
+                }
+
+                if (this.onFire) {
+                    this.fireTimer++;
+                    this.velX = this.fireSpeed * (this.facingRight ? 1 : -1);
+                    if (this.fireTimer > 150) { // 2.5 seconds at 60fps
+                        this.onFire = false;
+                        this.fireTimer = 0;
+                        this.velX = 0;
+                        this.triggerExplosion();
+                        return;
+                    }
+                }
+
+                // Physics
+                if (!this.onGround) {
+                    this.velY += GRAVITY;
+                }
+
+                this.x += this.velX;
+                this.y += this.velY;
+
+                // Platform collisions
+                this.onGround = false;
+                for (const platform of platforms) {
+                    if (this.velY > 0 && 
+                        this.x + this.width > platform.x && 
+                        this.x < platform.x + platform.width &&
+                        this.y + this.height > platform.y && 
+                        this.y + this.height < platform.y + platform.height + 10) {
+                        this.y = platform.y - this.height;
+                        this.velY = 0;
+                        this.onGround = true;
+                    }
+                }
+
+                // Ground collision
+                if (this.y + this.height >= SCREEN_HEIGHT - 50) {
+                    this.y = SCREEN_HEIGHT - 50 - this.height;
+                    this.velY = 0;
+                    this.onGround = true;
+                }
+
+                // Screen boundaries
+                if (this.x < 0) this.x = 0;
+
+                // Update cooldowns
+                if (this.shootCooldown > 0) this.shootCooldown--;
+
+                // Update health bar
+                const healthBar = document.getElementById('gameHealthFill');
+                if (healthBar) {
+                    const healthPercent = Math.max(0, (this.health / this.maxHealth) * 100);
+                    healthBar.style.width = healthPercent + '%';
+                }
+            }
+
+            jump() {
+                if (this.onGround && !this.onFire) {
+                    this.velY = JUMP_STRENGTH;
+                }
+            }
+
+            shoot() {
+                if (this.shootCooldown === 0 && !this.onFire && !this.exploding) {
+                    const arrow = new Arrow(
+                        this.x + (this.facingRight ? this.width : 0),
+                        this.y + 20,
+                        this.facingRight
+                    );
+                    this.arrows.push(arrow);
+                    this.shootCooldown = 20;
+                }
+            }
+
+            triggerExplosion() {
+                const baseX = this.x + this.width / 2;
+                const baseY = this.y + this.height / 2;
+                const colors = ["#ff0000", "#ff8000", "#ffff00", "#ff00ff"];
+                
+                for (let i = 0; i < 8; i++) {
+                    const angle = Math.random() * 2 * Math.PI;
+                    const speed = randInt(8, 15);
+                    this.pieces.push({
+                        x: baseX,
+                        y: baseY,
+                        vx: speed * Math.cos(angle),
+                        vy: speed * Math.sin(angle) - randInt(2, 7),
+                        radius: randInt(5, 12),
+                        color: colors[randInt(0, colors.length)]
+                    });
+                }
+                this.exploding = true;
+                this.explosionTimer = 0;
+            }
+
+            draw(ctx) {
+                const headX = this.x + this.width / 2;
+                const headY = this.y + 15;
+
+                if (this.exploding) {
+                    for (const piece of this.pieces) {
+                        ctx.beginPath();
+                        ctx.arc(piece.x, piece.y, piece.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = piece.color;
+                        ctx.fill();
+                    }
+                    return;
+                }
+
+                // Fire effect
+                if (this.onFire) {
+                    const fireIntensity = Math.min(this.fireTimer / 30, 1);
+                    for (let i = 0; i < 5; i++) {
+                        ctx.save();
+                        ctx.globalAlpha = (1 - i * 0.2) * fireIntensity;
+                        ctx.beginPath();
+                        ctx.arc(headX + randInt(-15, 15), headY + randInt(-10, 20), randInt(8, 15), 0, Math.PI * 2);
+                        ctx.fillStyle = i % 2 === 0 ? '#ff6400' : '#fff000';
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                }
+
+                ctx.save();
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+
+                // Head
+                ctx.beginPath();
+                ctx.arc(headX, headY, 10, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Body
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(headX, headY + 10);
+                ctx.lineTo(headX, this.y + 40);
+                ctx.stroke();
+
+                // Arms
+                const armY = headY + 15;
+                if (this.facingRight) {
+                    ctx.beginPath();
+                    ctx.moveTo(headX, armY);
+                    ctx.lineTo(headX + 15, armY + 5);
+                    ctx.stroke();
+                    
+                    // Bow
+                    ctx.strokeStyle = '#8B4513';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(headX + 15, armY + 5, 10, -1.5, 1.5, false);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    ctx.moveTo(headX, armY);
+                    ctx.lineTo(headX - 15, armY + 5);
+                    ctx.stroke();
+                    
+                    // Bow
+                    ctx.strokeStyle = '#8B4513';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(headX - 15, armY + 5, 10, 1.6, 4.7, false);
+                    ctx.stroke();
+                }
+
+                // Other arm
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(headX, armY);
+                ctx.lineTo(headX + (this.facingRight ? -10 : 10), armY + 10);
+                ctx.stroke();
+
+                // Legs
+                const legY = this.y + 40;
+                ctx.beginPath();
+                ctx.moveTo(headX, legY);
+                ctx.lineTo(headX - 10, this.y + this.height);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(headX, legY);
+                ctx.lineTo(headX + 10, this.y + this.height);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        class Arrow {
+            constructor(x, y, facingRight) {
+                this.x = x;
+                this.y = y;
+                this.velX = facingRight ? ARROW_SPEED : -ARROW_SPEED;
+                this.active = true;
+                this.stuck = false;
+                this.stuckTarget = null;
+                this.offsetX = 0;
+                this.offsetY = 0;
+            }
+
+            update() {
+                if (!this.stuck) {
+                    this.x += this.velX;
+                    if (this.x < -50 || this.x > SCREEN_WIDTH + 50) {
+                        this.active = false;
+                    }
+                } else if (this.stuckTarget) {
+                    this.x = this.stuckTarget.x + this.offsetX;
+                    this.y = this.stuckTarget.y + this.offsetY;
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.strokeStyle = '#8B4513';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                const endX = this.x + (this.velX > 0 ? 15 : -15);
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(endX, this.y);
+                ctx.stroke();
+
+                // Arrowhead
+                ctx.fillStyle = '#000000';
+                if (this.velX > 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(endX, this.y);
+                    ctx.lineTo(endX - 5, this.y - 3);
+                    ctx.lineTo(endX - 5, this.y + 3);
+                    ctx.fill();
+                } else {
+                    ctx.beginPath();
+                    ctx.moveTo(endX, this.y);
+                    ctx.lineTo(endX + 5, this.y - 3);
+                    ctx.lineTo(endX + 5, this.y + 3);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        class Piggy {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.width = 60;
+                this.height = 50;
+                this.velX = Math.random() > 0.5 ? PIG_SPEED : -PIG_SPEED;
+                this.velY = 0;
+                this.onGround = false;
+                this.alive = true;
+                this.angryTimer = randInt(0, 60);
+            }
+
+            update(platforms) {
+                if (!this.alive) {
+                    this.velY += GRAVITY * 0.7;
+                    this.x += this.velX * 0.8;
+                    this.y += this.velY;
+                    return;
+                }
+
+                this.velY += GRAVITY * 0.7;
+                this.x += this.velX;
+                this.y += this.velY;
+
+                // Random direction change
+                if (randInt(0, 120) < 2) {
+                    this.velX *= -1;
+                    this.angryTimer = 60;
+                }
+
+                // Platform collisions
+                this.onGround = false;
+                for (const platform of platforms) {
+                    if (this.velY > 0 && 
+                        this.x + this.width > platform.x && 
+                        this.x < platform.x + platform.width &&
+                        this.y + this.height > platform.y && 
+                        this.y + this.height < platform.y + platform.height + 10) {
+                        this.y = platform.y - this.height;
+                        this.velY = 0;
+                        this.onGround = true;
+                    }
+                }
+
+                // Ground collision
+                if (this.y + this.height >= SCREEN_HEIGHT - 50) {
+                    this.y = SCREEN_HEIGHT - 50 - this.height;
+                    this.velY = 0;
+                    this.onGround = true;
+                }
+
+                // Screen boundaries
+                if (this.x <= 0 || this.x + this.width >= SCREEN_WIDTH) {
+                    this.velX *= -1;
+                    this.x = Math.max(0, Math.min(SCREEN_WIDTH - this.width, this.x));
+                }
+
+                if (this.angryTimer > 0) this.angryTimer--;
+            }
+
+            draw(ctx) {
+                const centerX = this.x + this.width / 2;
+                const centerY = this.y + this.height / 2;
+                const color = this.alive ? (this.angryTimer > 0 ? '#FF4444' : '#FFC0CB') : '#666666';
+
+                ctx.save();
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.ellipse(centerX, centerY, this.width / 2, this.height / 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (this.alive) {
+                    // Snout
+                    ctx.fillStyle = '#FFB6C1';
+                    ctx.beginPath();
+                    ctx.ellipse(centerX, centerY + 5, 12, 8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Nostrils
+                    ctx.fillStyle = '#000000';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 3, centerY + 5, 1.5, 0, Math.PI * 2);
+                    ctx.arc(centerX + 3, centerY + 5, 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Eyes
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 12, centerY - 8, 6, 0, Math.PI * 2);
+                    ctx.arc(centerX + 12, centerY - 8, 6, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#000000';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 12, centerY - 8, 3, 0, Math.PI * 2);
+                    ctx.arc(centerX + 12, centerY - 8, 3, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Angry eyebrows
+                    if (this.angryTimer > 0) {
+                        ctx.strokeStyle = '#000000';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(centerX - 18, centerY - 15);
+                        ctx.lineTo(centerX - 8, centerY - 12);
+                        ctx.moveTo(centerX + 8, centerY - 12);
+                        ctx.lineTo(centerX + 18, centerY - 15);
+                        ctx.stroke();
+                    }
+                }
+                ctx.restore();
+            }
+        }
+
+        class CloudPlatform {
+            constructor(x, y, width) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = 20;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.fillStyle = '#FFFFFF';
+                
+                // Draw fluffy cloud shapes
+                const cloudY = this.y + 5;
+                for (let i = 0; i < this.width; i += 25) {
+                    const cloudX = this.x + i;
+                    ctx.beginPath();
+                    ctx.arc(cloudX, cloudY, 15, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.arc(cloudX + 10, cloudY - 5, 12, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.arc(cloudX + 20, cloudY, 15, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Base platform (invisible collision)
+                ctx.globalAlpha = 0.1;
+                ctx.fillStyle = '#CCCCCC';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.restore();
+            }
+        }
+
+        // Game initialization
+        function initGame() {
+            gameState.canvas = document.getElementById('gameCanvas');
+            gameState.ctx = gameState.canvas.getContext('2d');
+            gameState.worldOffset = 0;
+            
+            // Create player
+            gameState.player = new Player(100, 350);
+            
+            // Create fewer enemies (reduced from 9 to 5)
+            gameState.enemies = [];
+            for (let i = 0; i < MAX_PIGGIES; i++) {
+                gameState.enemies.push(new Piggy(randInt(350, 800), randInt(200, 400)));
+            }
+            
+            // Create platforms (actual cloud platforms)
+            gameState.platforms = [
+                new CloudPlatform(200, 450, 150),
+                new CloudPlatform(550, 320, 120),
+                new CloudPlatform(400, 200, 180),
+                new CloudPlatform(1200, 300, 100)
+            ];
+
+            gameState.gameRunning = true;
+            gameLoop();
+        }
+
+        function drawBonfire(ctx, x, y) {
+            ctx.save();
+            
+            // Wood base
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(x - 25, y, 50, 8);
+            
+            // Wood logs
+            for (let i = 0; i < 3; i++) {
+                ctx.fillRect(x - 20 + i * 20, y - 8, 8, 12);
+            }
+            
+            // Flames
+            for (let i = 0; i < 7; i++) {
+                const flameX = x - 20 + i * 6;
+                const flameHeight = 35 + Math.sin(Date.now() * 0.01 + i) * 5;
+                
+                ctx.beginPath();
+                ctx.moveTo(flameX - 5, y);
+                ctx.lineTo(flameX, y - flameHeight);
+                ctx.lineTo(flameX + 5, y);
+                ctx.closePath();
+                
+                const colors = ['#FF6400', '#FF8C00', '#FFD700'];
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+            }
+            ctx.restore();
+        }
+
+        function drawBackground(ctx) {
+            // Sky gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, SCREEN_HEIGHT);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#E0F6FF');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+            // Sun
+            ctx.fillStyle = '#FFFF00';
+            ctx.beginPath();
+            ctx.arc(900, 80, 40, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ground
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(0, SCREEN_HEIGHT - 50, SCREEN_WIDTH, 50);
+
+            // Trees (added back)
+            for (let i = 0; i < 8; i++) {
+                const treeX = i * 130 + 80 - gameState.worldOffset;
+                if (treeX > -50 && treeX < SCREEN_WIDTH + 50) {
+                    // Trunk
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(treeX, SCREEN_HEIGHT - 90, 15, 40);
+                    
+                    // Leaves
+                    ctx.fillStyle = '#228B22';
+                    ctx.beginPath();
+                    ctx.arc(treeX + 7, SCREEN_HEIGHT - 90, 25, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        function gameLoop() {
+            if (!gameState.gameRunning) return;
+
+            const ctx = gameState.ctx;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            
+            // Draw background
+            drawBackground(ctx);
+            
+            // Draw platforms
+            gameState.platforms.forEach(platform => platform.draw(ctx));
+            
+            // Draw bonfire
+            drawBonfire(ctx, 1200 - gameState.worldOffset, SCREEN_HEIGHT - 50);
+            
+            // Update and draw player
+            if (!gameState.player.gameOver) {
+                gameState.player.update(gameState.platforms);
+            }
+            gameState.player.draw(ctx);
+            
+            // Update and draw arrows
+            gameState.player.arrows = gameState.player.arrows.filter(arrow => {
+                arrow.update();
+                if (arrow.active) {
+                    arrow.draw(ctx);
+                    
+                    // Check arrow-enemy collisions
+                    gameState.enemies.forEach(enemy => {
+                        if (enemy.alive && !arrow.stuck &&
+                            arrow.x > enemy.x && arrow.x < enemy.x + enemy.width &&
+                            arrow.y > enemy.y && arrow.y < enemy.y + enemy.height) {
+                            enemy.alive = false;
+                            arrow.stuck = true;
+                            arrow.stuckTarget = enemy;
+                            arrow.offsetX = arrow.x - enemy.x;
+                            arrow.offsetY = arrow.y - enemy.y;
+                            arrow.velX = 0;
+                            
+                            // Make pig fly when hit
+                            enemy.velY = -PIG_BOUNCE_H;
+                            enemy.velX = randInt(10, 15) * (arrow.velX > 0 ? 1 : -1);
+                        }
+                    });
+                    
+                    return true;
+                }
+                return false;
+            });
+            
+            // Update and draw enemies
+            gameState.enemies.forEach(enemy => {
+                enemy.update(gameState.platforms);
+                enemy.draw(ctx);
+                
+                // Check player-enemy collisions
+                if (enemy.alive && !gameState.player.exploding && !gameState.player.onFire &&
+                    gameState.player.x < enemy.x + enemy.width &&
+                    gameState.player.x + gameState.player.width > enemy.x &&
+                    gameState.player.y < enemy.y + enemy.height &&
+                    gameState.player.y + gameState.player.height > enemy.y) {
+                    
+                    // Bounce player away
+                    if (gameState.player.x < enemy.x) {
+                        gameState.player.velX = -PIG_BOUNCE_H;
+                    } else {
+                        gameState.player.velX = PIG_BOUNCE_H;
+                    }
+                    gameState.player.velY = -PIG_BOUNCE_V;
+                    enemy.angryTimer = 90;
+                    gameState.player.health -= 2;
+                }
+            });
+            
+            // Check bonfire collision
+            const bonfireX = 1200 - gameState.worldOffset;
+            const bonfireW = 50;
+            const bonfireTop = SCREEN_HEIGHT - 50;
+            
+            if (!gameState.player.onFire && !gameState.player.exploding &&
+                gameState.player.x + gameState.player.width > bonfireX - bonfireW/2 &&
+                gameState.player.x < bonfireX + bonfireW/2 &&
+                gameState.player.y + gameState.player.height >= bonfireTop) {
+                gameState.player.onFire = true;
+                gameState.player.fireTimer = 0;
+                if (gameState.player.velX === 0) {
+                    gameState.player.facingRight = true;
+                }
+            }
+            
+            // Check game over
+            if (gameState.player.health <= 0 && !gameState.player.gameOver) {
+                gameState.player.gameOver = true;
+            }
+            
+            // Game over screen
+            if (gameState.player.gameOver && !gameState.player.exploding) {
+                ctx.save();
+                ctx.font = 'bold 48px Arial';
+                ctx.fillStyle = '#FF0000';
+                ctx.textAlign = 'center';
+                ctx.fillText('GAME OVER', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText('Restarting in 3 seconds...', SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 40);
+                ctx.restore();
+                
+                setTimeout(() => {
+                    initGame();
+                }, 3000);
+                return;
+            }
+            
+            // Side scrolling
+            const centerX = SCREEN_WIDTH * 0.6;
+            if (gameState.player.x > centerX && gameState.player.velX > 0) {
+                const scroll = gameState.player.velX;
+                gameState.worldOffset += scroll;
+                gameState.platforms.forEach(p => p.x -= scroll);
+                gameState.enemies.forEach(e => e.x -= scroll);
+                gameState.player.x = centerX;
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Navigation Functions
+        function showHomePage() {
+            appState.currentPage = 'home';
+            document.getElementById('homePage').style.display = 'flex';
+            document.getElementById('chatPage').classList.remove('active');
+            document.getElementById('gamePage').classList.remove('active');
+            
+            // Update nav buttons
+            document.getElementById('homeBtn').classList.add('active');
+            document.getElementById('chatNavBtn').classList.remove('active');
+            document.getElementById('gameNavBtn').classList.remove('active');
+            
+            gameState.gameRunning = false;
+        }
+
+        function showChatPage() {
+            appState.currentPage = 'chat';
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('chatPage').classList.add('active');
+            document.getElementById('gamePage').classList.remove('active');
+            
+            // Update nav buttons
+            document.getElementById('homeBtn').classList.remove('active');
+            document.getElementById('chatNavBtn').classList.add('active');
+            document.getElementById('gameNavBtn').classList.remove('active');
+            
+            gameState.gameRunning = false;
+        }
+
+        function showGamePage() {
+            appState.currentPage = 'game';
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('chatPage').classList.remove('active');
+            document.getElementById('gamePage').classList.add('active');
+            
+            // Update nav buttons
+            document.getElementById('homeBtn').classList.remove('active');
+            document.getElementById('chatNavBtn').classList.remove('active');
+            document.getElementById('gameNavBtn').classList.add('active');
+            
+            // Initialize game when page is shown
+            setTimeout(initGame, 100);
+        }
+
+        // Navigation event listeners
+        document.getElementById('homeBtn').addEventListener('click', showHomePage);
+        document.getElementById('chatNavBtn').addEventListener('click', showChatPage);
+        document.getElementById('gameNavBtn').addEventListener('click', showGamePage);
+
+        // Authentication Functions
+        function showAuth() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        function hideAuth() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        // Auth form handling
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            
+            // Simple demo authentication
+            if (email === 'demo@phoenix.com' && password === 'phoenix') {
+                appState.currentUser = { email: email };
+                hideAuth();
+                updateAuthStatus();
+                addMessage('assistant', 'Welcome back to Phoenix Flight! Your API keys are configured and ready. I can now provide real AI responses using your selected provider and model.');
+            } else {
+                alert('Invalid credentials. Try: demo@phoenix.com / phoenix');
+            }
+        });
+
+        // Auth tab switching
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const isLogin = this.dataset.tab === 'login';
+                document.getElementById('authSubmitText').textContent = isLogin ? 'Enter Portal' : 'Create Account';
+            });
+        });
+
+        function updateAuthStatus() {
+            const loginBtn = document.querySelector('.control-btn');
+            if (appState.currentUser) {
+                loginBtn.innerHTML = '<i class="fas fa-user-check"></i> ' + appState.currentUser.email.split('@')[0];
+            }
+        }
+
+        // SYSTEM PROMPT FUNCTIONALITY
+        function showSystemPromptModal() {
+            document.getElementById('systemPromptModal').classList.remove('hidden');
+            updateSavedPromptsList();
+            updateCurrentPromptDisplay();
+        }
+
+        function closeSystemPromptModal() {
+            document.getElementById('systemPromptModal').classList.add('hidden');
+        }
+
+        function saveSystemPrompt() {
+            const name = document.getElementById('promptName').value.trim();
+            const content = document.getElementById('promptContent').value.trim();
+            
+            if (!name || !content) {
+                alert('Please enter both a name and content for the system prompt.');
+                return;
+            }
+            
+            const newPrompt = {
+                id: Date.now().toString(),
+                name: name,
+                content: content,
+                createdAt: new Date()
+            };
+            
+            appState.systemPrompts.push(newPrompt);
+            localStorage.setItem('phoenixSystemPrompts', JSON.stringify(appState.systemPrompts));
+            
+            // Clear form
+            document.getElementById('promptName').value = '';
+            document.getElementById('promptContent').value = '';
+            
+            updateSavedPromptsList();
+            alert('System prompt saved successfully!');
+        }
+
+        function updateSavedPromptsList() {
+            const select = document.getElementById('savedPrompts');
+            select.innerHTML = '<option value="">Select a prompt...</option>';
+            
+            appState.systemPrompts.forEach(prompt => {
+                const option = document.createElement('option');
+                option.value = prompt.id;
+                option.textContent = prompt.name;
+                select.appendChild(option);
+            });
+        }
+
+        function loadSystemPrompt() {
+            const selectedId = document.getElementById('savedPrompts').value;
+            if (!selectedId) {
+                alert('Please select a prompt to load.');
+                return;
+            }
+            
+            const prompt = appState.systemPrompts.find(p => p.id === selectedId);
+            if (prompt) {
+                appState.activeSystemPrompt = prompt.content;
+                appState.currentSystemPromptId = prompt.id;
+                localStorage.setItem('activeSystemPrompt', prompt.content);
+                localStorage.setItem('currentSystemPromptId', prompt.id);
+                updateCurrentPromptDisplay();
+                alert(`System prompt "${prompt.name}" is now active!`);
+            }
+        }
+
+        function deleteSystemPrompt() {
+            const selectedId = document.getElementById('savedPrompts').value;
+            if (!selectedId) {
+                alert('Please select a prompt to delete.');
+                return;
+            }
+            
+            const prompt = appState.systemPrompts.find(p => p.id === selectedId);
+            if (prompt && confirm(`Are you sure you want to delete "${prompt.name}"?`)) {
+                appState.systemPrompts = appState.systemPrompts.filter(p => p.id !== selectedId);
+                localStorage.setItem('phoenixSystemPrompts', JSON.stringify(appState.systemPrompts));
+                
+                // If this was the active prompt, clear it
+                if (appState.currentSystemPromptId === selectedId) {
+                    appState.activeSystemPrompt = null;
+                    appState.currentSystemPromptId = null;
+                    localStorage.removeItem('activeSystemPrompt');
+                    localStorage.removeItem('currentSystemPromptId');
+                    updateCurrentPromptDisplay();
+                }
+                
+                updateSavedPromptsList();
+                alert('System prompt deleted successfully!');
+            }
+        }
+
+        function updateCurrentPromptDisplay() {
+            const display = document.getElementById('currentPromptDisplay');
+            if (appState.activeSystemPrompt) {
+                const prompt = appState.systemPrompts.find(p => p.id === appState.currentSystemPromptId);
+                const promptName = prompt ? prompt.name : 'Unknown';
+                display.innerHTML = `
+                    <div style="color: #4caf50;">Active: ${promptName}</div>
+                    <div style="margin-top: 5px; font-size: 10px; opacity: 0.8;">${appState.activeSystemPrompt.substring(0, 100)}${appState.activeSystemPrompt.length > 100 ? '...' : ''}</div>
+                `;
+            } else {
+                display.innerHTML = '<div>No system prompt active</div>';
+            }
+        }
+
+        // Enhanced Admin Panel
+        function showAdminPanel() {
+            const passcode = prompt('Enter admin passcode:');
+            if (passcode === 'yuhaha') {
+                showAdminModal();
+            } else if (passcode !== null) {
+                alert('Invalid passcode');
+            }
+        }
+
+        function showAdminModal() {
+            // Create admin modal HTML
+            const adminModalHTML = `
+                <div id="adminPanelModal" class="modal">
+                    <div class="modal-content" style="max-width: 600px;">
+                        <div class="modal-header">
+                            <h3 style="color: #e3f2fd; margin: 0; text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);">Phoenix Control Center</h3>
+                            <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
+                        </div>
+                        
+                        <div class="admin-tabs" style="margin-bottom: 20px; display: flex;">
+                            <button class="admin-tab-btn active" onclick="showAdminTab('api-keys')">API Keys</button>
+                            <button class="admin-tab-btn" onclick="showAdminTab('models')">Models</button>
+                            <button class="admin-tab-btn" onclick="showAdminTab('settings')">Settings</button>
+                        </div>
+                        
+                        <!-- API Keys Tab -->
+                        <div id="admin-tab-api-keys" class="admin-tab-content">
+                            <h4 style="color: #b3d9ff; margin-bottom: 15px; font-size: 14px;">API Configuration</h4>
+                            
+                            <div class="api-key-section">
+                                <label>Cerebras API Key:</label>
+                                <input type="password" id="cerebrasApiKey" placeholder="Enter your Cerebras API key">
+                                <small>Get your key at: https://cloud.cerebras.ai/</small>
+                            </div>
+                            
+                            <div class="api-key-section">
+                                <label>Groq API Key:</label>
+                                <input type="password" id="groqApiKey" placeholder="Enter your Groq API key">
+                                <small>Get your key at: https://console.groq.com/</small>
+                            </div>
+                            
+                            <div class="api-key-section">
+                                <label>OpenRouter API Key:</label>
+                                <input type="password" id="openrouterApiKey" placeholder="Enter your OpenRouter API key">
+                                <small>Get your key at: https://openrouter.ai/</small>
+                            </div>
+                            
+                            <div class="api-key-section">
+                                <label>Modal Token:</label>
+                                <input type="password" id="modalApiKey" placeholder="Enter your Modal token">
+                                <small>Get your token with: modal token new</small>
+                            </div>
+                            
+                            <div class="api-key-section">
+                                <label>Fish Audio STT API Key:</label>
+                                <input type="password" id="fishApiKey" placeholder="Enter your Fish Audio API key">
+                                <small>Get your key at: https://fish.audio/auth/signup</small>
+                            </div>
+                            
+                            <div class="api-key-section">
+                                <label>Segmind (Chatterbox TTS) API Key:</label>
+                                <input type="password" id="segmindApiKey" placeholder="Enter your Segmind API key">
+                                <small>Get your key at: https://www.segmind.com/</small>
+                            </div>
+                            
+                            <button onclick="saveApiKeys()" class="btn--primary btn--full-width">
+                                Save API Keys
+                            </button>
+                            
+                            <div style="margin-top: 15px; padding: 12px; background: rgba(0, 150, 255, 0.1); border-radius: 6px; border: 1px solid rgba(0, 150, 255, 0.3);">
+                                <h5 style="color: #b3d9ff; margin-bottom: 8px; font-size: 12px;">API Status:</h5>
+                                <div id="apiStatus" style="color: #90caf9; font-size: 11px; line-height: 1.4;">
+                                    <div>• Cerebras: <span id="cerebrasStatus" style="color: #4caf50;">Connected</span></div>
+                                    <div>• Groq: <span id="groqStatus" style="color: #4caf50;">Connected</span></div>
+                                    <div>• OpenRouter: <span id="openrouterStatus" style="color: #4caf50;">Connected</span></div>
+                                    <div>• Modal: <span id="modalStatus" style="color: #f44336;">Not Connected</span></div>
+                                    <div>• Fish Audio: <span id="fishStatus" style="color: #f44336;">Not Connected</span></div>
+                                    <div>• Segmind: <span id="segmindStatus" style="color: #f44336;">Not Connected</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Models Tab -->
+                        <div id="admin-tab-models" class="admin-tab-content" style="display: none;">
+                            <h4 style="color: #b3d9ff; margin-bottom: 15px; font-size: 14px;">Model Configuration</h4>
+                            <p style="color: #90caf9; font-size: 12px;">API connections are working. You can now use real AI models for responses.</p>
+                        </div>
+                        
+                        <!-- Settings Tab -->
+                        <div id="admin-tab-settings" class="admin-tab-content" style="display: none;">
+                            <h4 style="color: #b3d9ff; margin-bottom: 15px; font-size: 14px;">System Settings</h4>
+                            <p style="color: #90caf9; font-size: 12px;">Advanced settings and preferences.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add modal to page
+            document.body.insertAdjacentHTML('beforeend', adminModalHTML);
+            
+            // Load existing API keys
+            loadApiKeys();
+        }
+
+        function closeAdminModal() {
+            const modal = document.getElementById('adminPanelModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function showAdminTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.admin-tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`admin-tab-${tabId}`).style.display = 'block';
+            
+            // Add active class to selected button
+            event.target.classList.add('active');
+        }
+
+        function saveApiKeys() {
+            // Get API key values
+            const apiKeys = {
+                cerebras: document.getElementById('cerebrasApiKey').value.trim(),
+                groq: document.getElementById('groqApiKey').value.trim(),
+                openrouter: document.getElementById('openrouterApiKey').value.trim(),
+                modal: document.getElementById('modalApiKey').value.trim(),
+                fish: document.getElementById('fishApiKey').value.trim(),
+                segmind: document.getElementById('segmindApiKey').value.trim()
+            };
+            
+            // Save to application state and localStorage
+            appState.apiKeys = apiKeys;
+            localStorage.setItem('phoenixFlightApiKeys', JSON.stringify(apiKeys));
+            
+            // Update status indicators
+            updateApiStatus(apiKeys);
+            
+            alert('API Keys saved successfully!');
+        }
+
+        function loadApiKeys() {
+            // Load from localStorage first, then fall back to pre-filled keys
+            const savedKeys = localStorage.getItem('phoenixFlightApiKeys');
+            let apiKeys;
+            
+            if (savedKeys) {
+                apiKeys = JSON.parse(savedKeys);
+            } else {
+                apiKeys = appState.apiKeys; // Use pre-filled keys
+            }
+            
+            // Populate input fields
+            if (apiKeys.cerebras) document.getElementById('cerebrasApiKey').value = apiKeys.cerebras;
+            if (apiKeys.groq) document.getElementById('groqApiKey').value = apiKeys.groq;
+            if (apiKeys.openrouter) document.getElementById('openrouterApiKey').value = apiKeys.openrouter;
+            if (apiKeys.modal) document.getElementById('modalApiKey').value = apiKeys.modal;
+            if (apiKeys.fish) document.getElementById('fishApiKey').value = apiKeys.fish;
+            if (apiKeys.segmind) document.getElementById('segmindApiKey').value = apiKeys.segmind;
+            
+            // Update application state
+            appState.apiKeys = apiKeys;
+            
+            // Update status
+            updateApiStatus(apiKeys);
+        }
+
+        function updateApiStatus(apiKeys) {
+            // Update status indicators
+            document.getElementById('cerebrasStatus').textContent = apiKeys.cerebras ? 'Connected' : 'Not Connected';
+            document.getElementById('cerebrasStatus').style.color = apiKeys.cerebras ? '#4caf50' : '#f44336';
+            
+            document.getElementById('groqStatus').textContent = apiKeys.groq ? 'Connected' : 'Not Connected';
+            document.getElementById('groqStatus').style.color = apiKeys.groq ? '#4caf50' : '#f44336';
+            
+            document.getElementById('openrouterStatus').textContent = apiKeys.openrouter ? 'Connected' : 'Not Connected';
+            document.getElementById('openrouterStatus').style.color = apiKeys.openrouter ? '#4caf50' : '#f44336';
+            
+            document.getElementById('modalStatus').textContent = apiKeys.modal ? 'Connected' : 'Not Connected';
+            document.getElementById('modalStatus').style.color = apiKeys.modal ? '#4caf50' : '#f44336';
+            
+            document.getElementById('fishStatus').textContent = apiKeys.fish ? 'Connected' : 'Not Connected';
+            document.getElementById('fishStatus').style.color = apiKeys.fish ? '#4caf50' : '#f44336';
+            
+            document.getElementById('segmindStatus').textContent = apiKeys.segmind ? 'Connected' : 'Not Connected';
+            document.getElementById('segmindStatus').style.color = apiKeys.segmind ? '#4caf50' : '#f44336';
+        }
+
+        // Chat Functions
+        function updateModels() {
+            const provider = document.getElementById('providerSelect').value;
+            const modelSelect = document.getElementById('modelSelect');
+            const models = apiProviders[provider].models;
+            
+            modelSelect.innerHTML = '';
+            models.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model;
+                option.textContent = model;
+                modelSelect.appendChild(option);
+            });
+            
+            appState.selectedProvider = provider;
+            appState.selectedModel = models[0];
+        }
+
+        function addModel() {
+            const input = document.getElementById('newModelInput');
+            const modelName = input.value.trim();
+            
+            if (!modelName) return;
+            
+            const modelSelect = document.getElementById('modelSelect');
+            const option = document.createElement('option');
+            option.value = modelName;
+            option.textContent = modelName;
+            modelSelect.appendChild(option);
+            
+            // Select the new model
+            modelSelect.value = modelName;
+            appState.selectedModel = modelName;
+            
+            // Clear input
+            input.value = '';
+        }
+
+        function switchConversation(conversationId) {
+            appState.activeConversationId = conversationId;
+            
+            // Update active conversation in sidebar
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Load conversation messages
+            loadMessages();
+        }
+
+        function loadMessages() {
+            const container = document.getElementById('messagesContainer');
+            const conversation = appState.conversations[appState.activeConversationId];
+            
+            container.innerHTML = '';
+            
+            conversation.messages.forEach(message => {
+                addMessageToDOM(message.role, message.content);
+            });
+            
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addMessage(role, content) {
+            const conversation = appState.conversations[appState.activeConversationId];
+            conversation.messages.push({
+                role: role,
+                content: content,
+                timestamp: new Date()
+            });
+            
+            addMessageToDOM(role, content);
+            
+            const container = document.getElementById('messagesContainer');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addMessageToDOM(role, content) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = role === 'user' ? 'U' : 'AI';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = content;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(messageContent);
+            container.appendChild(messageDiv);
+        }
+
+        // REAL API CALL FUNCTION WITH SYSTEM PROMPT SUPPORT
+        async function callRealAPI(message) {
+            const provider = appState.selectedProvider;
+            const model = appState.selectedModel;
+            const apiKey = appState.apiKeys[provider];
+
+            if (!apiKey) {
+                return 'Error: No API key configured for ' + provider + '. Please set up your API keys in the admin panel.';
+            }
+
+            try {
+                let apiUrl, headers, body;
+                const messages = [];
+                
+                // Add system prompt if active
+                if (appState.activeSystemPrompt) {
+                    messages.push({
+                        role: "system",
+                        content: appState.activeSystemPrompt
+                    });
+                }
+                
+                // Add user message
+                messages.push({
+                    role: "user",
+                    content: message
+                });
+
+                if (provider === 'cerebras') {
+                    apiUrl = 'https://api.cerebras.ai/v1/chat/completions';
+                    headers = {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    };
+                    body = JSON.stringify({
+                        model: model,
+                        messages: messages,
+                        max_tokens: 500,
+                        temperature: 0.7
+                    });
+                } else if (provider === 'groq') {
+                    apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
+                    headers = {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    };
+                    body = JSON.stringify({
+                        model: model,
+                        messages: messages,
+                        max_tokens: 500,
+                        temperature: 0.7
+                    });
+                } else if (provider === 'openrouter') {
+                    apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
+                    headers = {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': window.location.href,
+                        'X-Title': 'Phoenix Flight Chat'
+                    };
+                    body = JSON.stringify({
+                        model: model,
+                        messages: messages,
+                        max_tokens: 500,
+                        temperature: 0.7
+                    });
+                } else {
+                    return 'Error: Provider ' + provider + ' API calls not implemented yet.';
+                }
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: headers,
+                    body: body
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.choices[0].message.content;
+
+            } catch (error) {
+                console.error('API Error:', error);
+                return `Error calling ${provider} API: ${error.message}. Please check your API key and try again.`;
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Call real API instead of generic response
+                const aiResponse = await callRealAPI(message);
+                
+                hideTypingIndicator();
+                addMessage('assistant', aiResponse);
+                
+                // Simulate TTS
+                simulateTTS();
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('assistant', 'I apologize, but I encountered an error processing your request. Please check your API configuration and try again.');
+            }
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function showTypingIndicator() {
+            const container = document.getElementById('messagesContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant';
+            typingDiv.id = 'typingIndicator';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'AI';
+            
+            const typingContent = document.createElement('div');
+            typingContent.className = 'typing-indicator';
+            typingContent.style.display = 'flex';
+            typingContent.innerHTML = `
+                <span>Thinking</span>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(typingContent);
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Voice Functions
+        function toggleVoiceRecording() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            
+            if (!appState.isRecording) {
+                // Start recording
+                appState.isRecording = true;
+                voiceBtn.classList.add('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                
+                // Simulate recording
+                setTimeout(() => {
+                    stopVoiceRecording();
+                }, 3000);
+                
+            } else {
+                stopVoiceRecording();
+            }
+        }
+
+        function stopVoiceRecording() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            appState.isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            
+            // Simulate STT conversion
+            const sttMessages = [
+                "Tell me about the Phoenix universe",
+                "Can you help me create a character?",
+                "What adventures are available?",
+                "I want to explore new dimensions"
+            ];
+            const randomSTT = sttMessages[Math.floor(Math.random() * sttMessages.length)];
+            
+            document.getElementById('messageInput').value = randomSTT;
+            
+            // Auto-send after a short delay
+            setTimeout(() => {
+                sendMessage();
+            }, 500);
+        }
+
+        function simulateTTS() {
+            // Simulate text-to-speech playback
+            console.log('Playing TTS audio for:', appState.selectedVoice);
+            
+            // You could add actual audio playback here
+            // const audio = new Audio('path-to-generated-audio.mp3');
+            // audio.play();
+        }
+
+        // PREVENT SPACEBAR FROM SCROLLING THE PAGE
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ' && gameState.gameRunning && appState.currentPage === 'game') {
+                e.preventDefault(); // Prevent page scroll
+            }
+        });
+
+        // Game Controls
+        document.addEventListener('keydown', function(e) {
+            if (gameState.gameRunning && appState.currentPage === 'game') {
+                gameState.keys[e.key] = true;
+                
+                // Handle game controls
+                if (gameState.player && !gameState.player.exploding && !gameState.player.onFire && !gameState.player.gameOver) {
+                    gameState.player.velX = 0;
+                    
+                    if (e.key === 'ArrowLeft') {
+                        gameState.player.velX = -MOVE_SPEED;
+                        gameState.player.facingRight = false;
+                    }
+                    if (e.key === 'ArrowRight') {
+                        gameState.player.velX = MOVE_SPEED;
+                        gameState.player.facingRight = true;
+                    }
+                    if (e.key === 'ArrowUp') {
+                        gameState.player.jump();
+                    }
+                    if (e.key === ' ') {
+                        gameState.player.shoot();
+                        e.preventDefault(); // Prevent scroll
+                    }
+                }
+            }
+        });
+
+        document.addEventListener('keyup', function(e) {
+            if (gameState.gameRunning && appState.currentPage === 'game') {
+                gameState.keys[e.key] = false;
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateModels();
+            loadMessages();
+            
+            // Load API keys on startup (will use pre-filled if none saved)
+            const savedKeys = localStorage.getItem('phoenixFlightApiKeys');
+            if (!savedKeys) {
+                // Save pre-filled keys to localStorage
+                localStorage.setItem('phoenixFlightApiKeys', JSON.stringify(appState.apiKeys));
+            } else {
+                appState.apiKeys = JSON.parse(savedKeys);
+            }
+            
+            // Load system prompts
+            const savedPrompts = localStorage.getItem('phoenixSystemPrompts');
+            if (savedPrompts) {
+                appState.systemPrompts = JSON.parse(savedPrompts);
+            }
+            
+            // Load active system prompt
+            const activePrompt = localStorage.getItem('activeSystemPrompt');
+            const currentPromptId = localStorage.getItem('currentSystemPromptId');
+            if (activePrompt) {
+                appState.activeSystemPrompt = activePrompt;
+                appState.currentSystemPromptId = currentPromptId;
+            }
+            
+            // Close modal when clicking outside
+            document.getElementById('authModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideAuth();
+                }
+            });
+            
+            // Close system prompt modal when clicking outside
+            document.getElementById('systemPromptModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeSystemPromptModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
